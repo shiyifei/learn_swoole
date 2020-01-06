@@ -2,7 +2,6 @@
 /**
  * 在 swoole 4.3.0版本中，process支持了协程，可以直接使用协程相关API,也可以使用协程调度的方式来实现进程间通信
  * 注意事项
-
     主进程中不要使用协程，否则在协程空间内，可能无法fork子进程。主进程内还是继续使用同步阻塞或者异步的模式来管理进程
     两个子进程之间实际上只需要一个管道即可完成通信
     管道类型是SOCK_STREAM时，多个进程同时写入一个进程的管道，可能存在风险，可能会产生数据错乱。
@@ -30,7 +29,8 @@ class SwooleProcess
     }
 
     /**
-     * 4.3.0版本新增了Process::exportSocket可以将管道导出为一个Swoole\Coroutine\Socket对象，通过读写此Socket就可以实现通信。
+     * 4.3.0版本新增了Process::exportSocket可以将管道导出为一个Swoole\Coroutine\Socket对象，
+     * 通过读写此Socket就可以实现通信。
      * @return [type] [description]
      */
     public function processCommunication()
