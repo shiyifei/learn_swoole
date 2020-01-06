@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>testing websocket client</title>
+</head>
+<body>
+    <div style="width:100%;text-align:center;">
+        <input type="button" onclick="closeSocket()" name="btnClose" value="close websocket" /></div>
+    <script type="text/javascript">
+    var wsServer = 'ws://192.168.56.102:9003';
+    var websocket = new WebSocket(wsServer);
+    websocket.onopen = function (evt) {
+        console.log("Connected to WebSocket server.");
+    };
+
+    websocket.onclose = function (evt) {
+        console.log("Disconnected");
+    };
+
+    websocket.onmessage = function (evt) {
+        console.log('Retrieved data from server: ' + evt.data);
+    };
+
+    websocket.onerror = function (evt, e) {
+        console.log('Error occured: ' + evt.data);
+    };
+
+    function closeSocket()
+    {
+        if (websocket != null && typeof(websocket) != "undefined") {
+            websocket.close();
+        } else {
+            console.log("websocket is not exists");
+        }
+    }
+    </script>
+</body>
+</html>
