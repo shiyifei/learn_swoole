@@ -19,6 +19,7 @@ $serv->on('connect', function($serv, $fd) {
     echo "Client:connect. \n";
 });
 
+//此事件在Worker进程/Task进程启动时发生
 $serv->on('WorkerStart', function($serv, $workerId) {
     // var_dump(get_included_files()); //此数组中的文件表示进程启动前就加载了，所以无法reload
 });
@@ -56,7 +57,7 @@ $serv->on('receive', function($serv, $fd, $from_id, $data) {
 
 //处理异步任务
 $serv->on('task', function($serv, $task_id, $from_id, $data){
-    echo "New AsyncTask[id={$task_id}]".PHP_EOL;
+    echo "worker_pid:{$serv->worker_pid}, New AsyncTask[id={$task_id}]".PHP_EOL;
 
     $info = $serv->stats();
     var_dump($info);
@@ -69,7 +70,7 @@ $serv->on('task', function($serv, $task_id, $from_id, $data){
 
 //处理异步任务的结果
 $serv->on('finish', function($serv, $task_id, $data){
-    echo "AsyncTask[$task_id] Finish: {$data}".PHP_EOL;
+    echo "worker_pid:{$serv->worker_pid},AsyncTask[$task_id] Finish: {$data}".PHP_EOL;
 });
 
 

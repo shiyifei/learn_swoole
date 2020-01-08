@@ -10,10 +10,28 @@ class TaskCoroutine
 {
     public function __construct()
     {   
-        $server = new Swoole\Http\Server('192.168.56.102', 9000, SWOOLE_BASE);
-        $server->set(['worker_num'=>1, 'task_worker_num'=>2]);
+        $server = new Swoole\Http\Server('192.168.56.102', 9002, SWOOLE_BASE);
+        $server->set(['worker_num'=>1, 'task_worker_num'=>2, 'chroot'=>'/tmp/root']);
+
+        $server->on('ManagerStart', function(swoole_server $serv){
+            echo "on ManagerStart, pid:{$serv->worker_pid}\n";
+        });
+
+        $server->on('ManagerStop', function(swoole_server $serv){
+            echo "on ManagerStop, pid:{$serv->worker_pid}\n";
+            $msg = "on ManagerStop, pid:{$serv->worker_pid}\n";
+            file_put_contents('/tmp/debug.log', $msg, FILE_APPEND);
+        });
 
         $server->on('WorkerStart', function($serv, $worker_id){
+            /**
+             * 在某些情况下，主进程需要使用Root来启动，比如需要监听80端口。这时Worker进程的业务代码也会运行在root用户下，这是非常不安全的。 业务代码的漏洞可能会导致整个服务器被攻破，所以需要将Worker进程所属用户和组改为其他用户。 在PHP中使用posix系列函数即可完成此操作。可在swoole的onWorkerStart回调中加入以下代码：
+             */
+            $user = posix_getpwnam('www-data');
+            posix_setuid($user['uid']);
+            posix_setgid($user['gid']);
+
+
             //Worker进程编号范围是[0, $serv->setting['worker_num']-1]
             //Task进程编号范围是[$serv->setting['worker_num'], $serv->setting['worker_num'] + $serv->setting['task_worker_num']-1]
 
