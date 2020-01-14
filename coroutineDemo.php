@@ -135,15 +135,25 @@ class CoroutineDemo
         $coroutines = iterator_to_array($coros);
         echo "in testList(), all coroutines:".var_export($coroutines, true)."\n";
     }
+
+    /**
+     * 获取协程状态
+     * @return [type] [description]
+     */
+    public function testStats()
+    {
+      var_dump(Swoole\Coroutine::stats());
+    }
 }
 
 $obj = new CoroutineDemo();
-$obj->createCoroutine();
+// $obj->createCoroutine();
 $obj->testNesting();
 $obj->nesting2();
 $obj->testDefer();
 $obj->testYield();
 $obj->testList();
+$obj->testStats();
 
 /*
 ** 结果：
