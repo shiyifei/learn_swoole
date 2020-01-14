@@ -3,6 +3,9 @@
  * sleep函数会使进程陷入睡眠阻塞
  */
 
+//全局开启协程化
+Swoole\Runtime::enableCoroutine();
+
 function printChar1($count) {
     for ($i=0; $i<$count; ++$i) {
         $max = ord('a')+26;
@@ -33,14 +36,14 @@ printChar2(500);
 echo "time interval:".round((microtime(true)-$begin)*1000,2)."ms ********************************** \n";
 
 //开启两个协程，检查使用协程后的效率
-Swoole\Runtime::enableCoroutine();
+
 $chan = new chan(2);
 $begin = microtime(true);
-go(function()use($chan){
+go (function() use($chan) {
     printChar1(500);
     $chan->push(['a'=>1]);
 });
-go(function()use($chan){
+go (function()use($chan) {
     printChar2(500);
     $chan->push(['b'=>1]);
 });
@@ -55,6 +58,7 @@ go(function() use($chan, $begin) {
 
 
 //以下是使用多个协程 并发请求外部接口的例子
+
 $chanReq = new chan(2);
 $begin = microtime(true);
 go(function() use($chanReq, $begin){
