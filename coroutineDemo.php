@@ -124,6 +124,17 @@ class CoroutineDemo
         });
 
     }
+
+    /**
+     * 遍历当前进程内的所有协程
+     * @return [type] [description]
+     */
+    public function testList()
+    {
+        $coros = co::list();
+        $coroutines = iterator_to_array($coros);
+        echo "in testList(), all coroutines:".var_export($coroutines, true)."\n";
+    }
 }
 
 $obj = new CoroutineDemo();
@@ -132,6 +143,7 @@ $obj->testNesting();
 $obj->nesting2();
 $obj->testDefer();
 $obj->testYield();
+$obj->testList();
 
 /*
 ** 结果：
