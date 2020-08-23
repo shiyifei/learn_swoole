@@ -1,6 +1,10 @@
 <?php
+
+$arrIp = swoole_get_local_ip();
+$localIp = $arrIp['enp0s3'];
+
 //创建server对象
-$serv = new swoole_server('192.168.56.102', 9001, SWOOLE_PROCESS, SWOOLE_SOCK_UDP);
+$serv = new swoole_server($localIp, 9501, SWOOLE_PROCESS, SWOOLE_SOCK_UDP);
 
 //监听数据发送事件
 $serv->on('Packet', function($serv, $data, $clientInfo) {

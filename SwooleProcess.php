@@ -14,7 +14,7 @@ class SwooleProcess
     /**
      * 4.3.0版本Process类的构造方法增加了第四个参数，传入true表示开启协程。
      * 开启协程后，可以直接调用协程相关API，无需自行创建。
-     * @return [type] [description]
+     * @return void
      */
     public function enableCoroutine()
     {
@@ -31,7 +31,7 @@ class SwooleProcess
     /**
      * 4.3.0版本新增了Process::exportSocket可以将管道导出为一个Swoole\Coroutine\Socket对象，
      * 通过读写此Socket就可以实现通信。
-     * @return [type] [description]
+     * @return void
      */
     public function processCommunication()
     {
